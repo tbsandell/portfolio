@@ -1,0 +1,21 @@
+body {
+	margin: 0rem;
+}
+nav {
+	font-size: 1.5rem;
+	background-color: royalblue;
+	color: white;
+	margin: 0rem;
+	padding: 0.5rem;
+	cursor: pointer;
+}
+
+nav a {
+	padding: 0.5rem;
+	text-decoration: none;
+	color: inherit;
+}
+
+nav a:hover {
+	background-color: cornflowerblue;
+}
