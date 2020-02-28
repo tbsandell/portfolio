@@ -1,23 +1,18 @@
 from typing import List, TypeVar, Dict
+from functools import reduce
 
 number = TypeVar("number", int, float)
 intOrList = TypeVar("intOrList", int, float)
 
 def product(nums: List[number]) -> number:
-	prod = 1
-	for num in nums:
-		prod *= num
-	return prod
+	return reduce(lambda a, b: a * b, nums, 1)
 
 def sumRange(start: int, lessThan: int, divisibleBy: int = 1) -> number:
 	"""Returns the sum of all numbers x where start <= x < lessThan and x mod divisibleBy = 0"""
-	sum = 0
-	while start % divisibleBy != 0:
-		sum += start
-		start += 1
-	start = int(start / divisibleBy)
-	lessThan = int((lessThan - 1) / divisibleBy)
-	return int(sum + divisibleBy * ((lessThan ** 2 + lessThan) - (start ** 2 + start)) / 2)
+	start = (start - 1) // divisibleBy
+	lessThan = (lessThan - 1) // divisibleBy
+	return (((lessThan ** 2 + lessThan) // 2) - ((start ** 2 + start) // 2)) * divisibleBy
+
 
 def isPalindrome(val: intOrList) -> bool:
 	"""Returns whether or not val is a palindrome"""
@@ -27,10 +22,6 @@ def isPalindrome(val: intOrList) -> bool:
 		if val[i] != val[-i - 1]:
 			return False
 	return True
-
-def primes(lessThan):
-	"""Returns all primes less than lessThan"""
-	pass
 
 def primeFactors(num: int) -> List[int]:
 	"""Returns the prime factors of num"""
@@ -48,15 +39,22 @@ def primeFactors(num: int) -> List[int]:
 			break
 	return sorted(arr)
 
-def primeFactorsDict(num: int) -> Dict[int, int]:
-	arr = primeFactors(num)
-	d = dict()
-	for i in arr:
-		if i in list(d.keys()):
-			d.update({i: d[i] + 1})
-		else:
-			d.update({i: 1})
-	return d
+def lcm(*nums: int) -> int:
+	"""Returns the least common multiple of *nums"""
+	nums = list(nums)
+	if len(nums) < 2:
+		return nums[0]
+	arr0 = primeFactors(nums[0])
+	arr1 = primeFactors(nums[1])
+	fin = []
+	while len(arr0) > 0:
+		if arr0[0] in arr1:
+			arr1.remove(arr0[0])
+		fin.append(arr0[0])
+		arr0 = arr0[1:]
+	nums = nums [2:]
+	nums.insert(0, product(arr1) * product(fin))
+	return lcm(*nums)
 
 def fib(lessThan: int) -> List[int]:
 	"""Returns all fibonacci numbers < lessThan"""
@@ -74,43 +72,18 @@ def nFib(n: int) -> List[int]:
 		arr.append(arr[-1] + arr[-2])
 	return arr
 
-def lcm(*nums: int) -> int:
-	"""Returns the least common multiple of *nums"""
-	primeDicts = [primeFactorsDict(num) for num in nums]
-	finalPrimeDict = dict()
-	final = 1
-	for d in primeDicts:
-		for k in list(d.keys()):
-			if k in list(finalPrimeDict.keys()):
-				if d[k] > finalPrimeDict[k]:
-					finalPrimeDict.update({k: d[k]})
-			else:
-				finalPrimeDict.update({k: d[k]})
-	for k in list(finalPrimeDict.keys()):
-		final *= k ** finalPrimeDict[k]
-	return final
-	
-
-def removeDuplicates(arr: list) -> list:
-	"""Returns an array with all duplicates removed"""
-	return list(set(arr))
-
-def removeOneMultiple(nums: List[int]) -> List[int]:
-	nums = sorted(removeDuplicates(nums))
-	for i in range(len(nums) - 1):
-		for j in range(i + 1, len(nums)):
-			if nums[j] % nums[i] == 0:
-				nums.remove(nums[j])
-				return nums
-	return nums
-
 def removeMultiples(nums: List[int]) -> List[int]:
 	"""Returns an array with all multiples removed ([2,3,4,5,6] -> [2,3,5])"""
+	nums = sorted(nums)
 	arr = []
-	while arr != nums:
-		arr = nums
-		nums = removeOneMultiple(nums)
-	return nums
+	while len(nums) > 0:
+		for num in nums:
+			nums.remove(num)
+			arr.append(num)
+			for n in nums:
+				if n % arr[-1] == 0:
+					nums.remove(n)
+	return arr
 
 def euler1(start: int, lessThan: int, *divisibleBy: int) -> int:
 	"""Returns the sum of all integers 'i' where greaterThan < i < lessThan and i is divisible by all divisibleBy"""
@@ -122,15 +95,15 @@ def euler1(start: int, lessThan: int, *divisibleBy: int) -> int:
 		else:
 			return sumRange(start, lessThan, *divisibleBy)
 	else:
-		divisibleBy = removeMultiples(divisibleBy)
+		divisibleBy = list(divisibleBy)
 		sum = 0
-		arr = []
-		for divBy in divisibleBy:
-			sum += euler1(start, lessThan, divBy)
-		for i in range(len(divisibleBy) - 1):
-			arr.append(lcm(divisibleBy[i], divisibleBy[i + 1]))
-		sum -= euler1(start, lessThan, *arr)
-		return sum
+		print(divisibleBy)
+		sum += euler1(start, lessThan, divisibleBy[0])
+		sum += euler1(start, lessThan, *divisibleBy[1:])
+		for i in range(len(divisibleBy)):
+			divisibleBy[i] = lcm(divisibleBy[i], divisibleBy[0])
+		print(divisibleBy[1:])
+		return sum - euler1(start, lessThan, *divisibleBy[1:])
 
 def euler2(lessThan: int, *divisibleBy: int) -> int:
 	"""Returns the sum of all fibonacci numbers < lessThan and divisible by all divisibleBy. Whole numbers only"""
@@ -161,11 +134,8 @@ def euler5(*nums: int) -> int:
 
 def euler6(n: int) -> int:
 	"""Returns the difference between the sum of the sqaures of the first n whole numbers and the sqaure of the sum of the first n whole numbers"""
-	return sum(range(n)) ** 2 - sum([i ** 2 for i in range(n)])
+	return sum(range(n + 1)) ** 2 - sum([i ** 2 for i in range(n + 1)])
 
-def euler7(n: int) -> int:
-	"""Returns the nth prime"""
-	n
 
 def euler700() -> int:
 	arr0, arr1, m = [1504170715041707, 8912517754604], [1, 3], 4503599627370517
@@ -176,8 +146,5 @@ def euler700() -> int:
 				arr1.append(arr1[-1] * i - arr1[-2])
 				break
 	return sum(arr0)
-
-
-	
-if __name__ == '__main__':
-	print(lcm(1,2,3,4,5,6,7,8))
+print(sumRange(0,1000,2) + sumRange(0,1000,3) + sumRange(0,1000,5) - sumRange(0,1000,6) - sumRange(0,1000,10) - sumRange(0,1000,15) + sumRange(0,1000,30))
+print(euler1(0,1000,2,3,5))

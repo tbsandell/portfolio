@@ -1,4 +1,8 @@
+# All
+
+- Make better styles
+
 # Euler
 
-- Convert euler.py to javascript
-- Make euler.html interactive
+- Solve more problems
+- Finish interactive part in euler.html
