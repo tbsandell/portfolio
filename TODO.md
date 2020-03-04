@@ -5,4 +5,3 @@
 # Euler
 
 - Solve more problems
-- Finish interactive part in euler.html
