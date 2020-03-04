@@ -408,3 +408,4 @@ window.onload = function() {
 	}
 	this.changeProb('All');
 };
+console.log('test');
