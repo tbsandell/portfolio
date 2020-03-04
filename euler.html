@@ -5,6 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="./highlight/highlight.pack.js"></script>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="./highlight/styles/github-gist.css">
   <link rel="stylesheet" href="main.css">
   <title>Portfolio</title>
 </head>
@@ -24,34 +30,16 @@
   <main>
     <h1>Euler</h1>
     <p>Solutions to problems found at <a href="https://projecteuler.net/archives">ProjectEuler</a></p>
-    <div id='euler1'>
-      <h3>Problem 1</h3>
-      euler1(<input id="euler1in" type="text" value="0, 1000, 3, 5">);
-      <button onclick="let arg = document.getElementById('euler1in').value;
-        document.getElementById('euler1out').innerHTML = eval('euler1(' + arg + ')')">Try it!</button>
-      <p id="euler1out"></p>
-      <pre><code id='euler1code'></code></pre>
-    </div>
-    <div id='euler2'>
-      <h3>Problem 2</h3>
-      <pre><code id='euler2code'></code></pre>
-    </div>
-    <div id='euler3'>
-      <h3>Problem 3</h3>
-      <pre><code id='euler3code'></code></pre>
-    </div>
-    <div id='euler4'>
-      <h3>Problem 4</h3>
-      <pre><code id='euler4code'></code></pre>
-    </div>
-    <div id='euler5'>
-      <h3>Problem 5</h3>
-      <pre><code id='euler5code'></code></pre>
-    </div>
-    <div id='euler6'>
-      <h3>Problem 6</h3>
-      <pre><code id='euler6code'></code></pre>
-    </div>
+    <select id="probSelect" onchange="changeProb();"></select>
+    <!--<table class="table">
+      <tr class="row">
+        <td class="col-2"></td>
+        <td class="col-8">-->
+    <table class="table" id="euler"></table>
+    <!--</td>
+        <td class="col-2"></td>
+      </tr>
+    </table>-->
     <script src="./euler.js"></script>
   </main>
 </body>

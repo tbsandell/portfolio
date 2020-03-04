@@ -16,10 +16,25 @@ nav {
 
 nav a {
 	padding: 0.5rem;
-	text-decoration: none;
 	color: inherit;
 }
 
 nav a:hover {
 	background-color: cornflowerblue;
+	color: inherit;
+	text-decoration: none;
+}
+
+.euler-code {
+	display: block;
+	margin-right: 2rem;
+}
+
+.euler-desc,
+.euler-sol {
+	white-space: pre-wrap;
+}
+
+.row {
+	margin-right: 10px;
 }
